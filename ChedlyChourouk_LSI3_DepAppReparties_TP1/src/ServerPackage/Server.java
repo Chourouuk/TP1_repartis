@@ -1,30 +1,57 @@
 package ServerPackage;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
-import java.net.Socket;
-
-public class Server {
-    public static void main(String[] args) {
-        System.out.println("je suis un serveur");
-        try {
-            ServerSocket ss=new ServerSocket(1234);
-            System.out.println("j'attend un client");
-            Socket s=ss.accept();
-            System.out.println("un client est connecté");
-            OutputStream os =s.getOutputStream();
-            InputStream is =s.getInputStream();
-            int nb = is.read();
-            System.out.println("j'ai reçu la valeur "+nb);
-            int rep =nb*5;
-            os.write(rep);
-
-
-
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-}
+import java.net.Socket; 
+ class Server { 
+public static void main (String[] args) { 
+try { 
+         ServerSocket serverSocket = new ServerSocket(1234); 
+         System.out.println("I am a server waiting for a client connexion..."); 
+         Socket socket = serverSocket.accept(); 
+         
+         InputStream inputStream = socket.getInputStream(); 
+         OutputStream outputStream = socket.getOutputStream();
+         
+         System.out.println("Waiting for a number ... "); 
+         int nb = inputStream.read(); 
+         System.out.println("Data received : " + nb); 
+         int choice = inputStream.read(); 
+         int rep; 
+   switch (choice) { 
+               case 1: 
+                   System.out.println("The client selected Addition operation"); 
+                   rep = nb + 5; 
+                   outputStream.write(rep); 
+                   break; 
+               case 2: 
+                   System.out.println("The client selected Soustraction operation"); 
+                   rep = nb - 5; 
+                   outputStream.write(rep); 
+                   break; 
+               case 3: 
+                   System.out.println("The client selected Multiplication operation"); 
+                   rep = nb * 5; 
+                   outputStream.write(rep); 
+                   break; 
+               case 4: 
+                   System.out.println("The client selected Division operation"); 
+                   rep = nb / 5; 
+                   outputStream.write(rep); 
+                   break; 
+               default: 
+                   System.out.println("Return to Client."); 
+           } 
+ 
+ 
+           System.out.println("Closing the socket..."); 
+ 
+           socket.close(); 
+           serverSocket.close(); 
+ 
+       } catch (Exception e) { 
+           e.printStackTrace(); 
+       } 
+   } 
+} 
